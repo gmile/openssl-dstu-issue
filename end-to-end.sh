@@ -1,4 +1,4 @@
-echo "Extracting key and certs from $1..."
+echo "Extracting key and certs from pb_key.jks..."
 jks-key-extractor /pb_key.jks $1 /tmp/workdir
 
 echo "Converting extracted key from DER to PEM..."
