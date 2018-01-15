@@ -1,3 +1,6 @@
+echo "Cleaning up the mess..."
+rm -r /tmp/workdir
+
 echo "Extracting key and certs from pb_key.jks..."
 jks-key-extractor /pb_key.jks $1 /tmp/workdir
 
@@ -22,13 +25,10 @@ echo "Creating a sample message..."
 echo "Hello, world!" > /tmp/workdir/message.txt
 
 echo "Attempting to sign the message..."
-/openssl-sandbox/openssl-dstu/apps/openssl smime \
+gdb --args /openssl-sandbox/openssl-dstu/apps/openssl smime \
   -sign \
   -in /tmp/workdir/message.txt \
   -out /tmp/workdir/message.txt.signed \
   -signer /tmp/workdir/signer.pem \
   -inkey /tmp/workdir/key.pem \
   -text
-
-echo "Cleaning up the mess..."
-rm -r /tmp/workdir

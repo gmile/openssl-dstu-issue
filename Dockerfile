@@ -13,6 +13,7 @@ RUN apt-get -y install \
     make \
     gcc \
     curl \
+    gdb \
     git
 
 # Add nodejs + jks-key-extractor
@@ -36,11 +37,9 @@ RUN cd openssl-dstu; \
                 no-mdc2 \
                 no-rc5 \
                 no-zlib \
-                enable-tlsext \
-                no-ssl2 \
                 enable-uadstu \
                 enable-ec_nistp_64_gcc_128 \
                 enable-ec_nistp_64_gcc_128 \
-                linux-x86_64 && \
+                debug-linux-x86_64; \
     make depend && \
     make
