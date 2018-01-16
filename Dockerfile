@@ -4,6 +4,7 @@ FROM ubuntu:14.04
 WORKDIR /openssl-sandbox
 ADD patch1.patch /openssl-sandbox
 ADD patch2.patch /openssl-sandbox
+ADD patch3.patch /openssl-sandbox
 ADD end-to-end.sh /openssl-sandbox
 
 # Install some essential tools
@@ -26,7 +27,8 @@ RUN git clone https://github.com/dstucrypt/openssl-dstu.git; \
     cd openssl-dstu; \
     git checkout dstu-1_0_1h; \
     git apply /openssl-sandbox/patch1.patch; \
-    git apply /openssl-sandbox/patch2.patch
+    git apply /openssl-sandbox/patch2.patch; \
+    git apply /openssl-sandbox/patch3.patch
 
 # Build openssl-dstu
 RUN cd openssl-dstu; \

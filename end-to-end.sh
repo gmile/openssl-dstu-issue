@@ -25,7 +25,7 @@ echo "Creating a sample message..."
 echo "Hello, world!" > /tmp/workdir/message.txt
 
 echo "Attempting to sign the message..."
-gdb --args /openssl-sandbox/openssl-dstu/apps/openssl smime \
+gdb -ex run --args /openssl-sandbox/openssl-dstu/apps/openssl smime \
   -sign \
   -in /tmp/workdir/message.txt \
   -out /tmp/workdir/message.txt.signed \
