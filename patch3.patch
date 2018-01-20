@@ -1,0 +1,14 @@
+diff --git a/engines/uadstu/dstu_md.c b/engines/uadstu/dstu_md.c
+index f69f9bfcc..74d09ea07 100644
+--- a/engines/uadstu/dstu_md.c
++++ b/engines/uadstu/dstu_md.c
+@@ -79,6 +79,9 @@ static int dstu_md_cleanup(EVP_MD_CTX *ctx)
+ 
+ static int dstu_md_ctrl(EVP_MD_CTX *ctx, int cmd, int p1, void *p2)
+     {
++    if (!ctx) {
++        return 0;
++    }
+     gost_subst_block sbox;
+     struct dstu_digest_ctx *c = ctx->md_data;
+ 
