@@ -1,0 +1,27 @@
+# vi:syntax=Dockerfile
+
+FROM ubuntu:14.04
+
+WORKDIR /openssl-sandbox
+
+RUN apt-get update
+RUN apt-get -y install \
+  wget \
+  make gcc \
+  devscripts debhelper m4 bc
+
+RUN wget https://launchpad.net/ubuntu/+archive/primary/+files/openssl_1.0.1f.orig.tar.gz
+RUN wget https://launchpad.net/ubuntu/+archive/primary/+files/openssl_1.0.1f-1ubuntu2.23.debian.tar.gz
+RUN wget https://launchpad.net/~ilya-muromec/+archive/ubuntu/openssl-dstu/+files/openssl_1.0.1f-1ubuntu9dstu2~utopic.debian.tar.gz
+
+RUN tar xvf openssl_1.0.1f.orig.tar.gz
+RUN tar xvf openssl_1.0.1f-1ubuntu2.23.debian.tar.gz -C openssl-1.0.1f
+RUN mkdir openssl-dstu-example && tar xvf openssl_1.0.1f-1ubuntu9dstu2~utopic.debian.tar.gz -C openssl-dstu-example
+
+RUN cp openssl-dstu-example/debian/patches/dstu.patch             openssl-1.0.1f/debian/patches
+RUN cp openssl-dstu-example/debian/patches/dstu-engine-path.patch openssl-1.0.1f/debian/patches
+RUN cp openssl-dstu-example/debian/patches/dstu-engine-ld.patch   openssl-1.0.1f/debian/patches
+
+RUN echo dstu.patch             >> openssl-1.0.1f/debian/patches/series
+RUN echo dstu-engine-path.patch >> openssl-1.0.1f/debian/patches/series
+RUN echo dstu-engine-ld.patch   >> openssl-1.0.1f/debian/patches/series
