@@ -2,7 +2,9 @@
 
 This repo contains Dockerfiles to help build & test OpenSSL with DSTU patches.
 
-## Dockerfile
+Below all 3 Dockerfiles are described.
+
+## `Dockerfile`
 
 Describes an image suitable for development process.
 
@@ -14,7 +16,7 @@ In order to build an image, run:
 docker build --file Dockerfile --tag gmile/openssl-dstu-dev .
 ```
 
-## Dockerfile.build
+## `Dockerfile.build`
 
 Describes an image suitable for .deb publishing process.
 
@@ -65,7 +67,7 @@ dput ppa:iamexile/openssl-with-dstu openssl_1.0.1f-1ubuntu2.24_source.changes
 - try a more recent Ubuntu LTS (at least Utopic should work?)
 - try a more recent OpenSSL
 
-## Dockerfile.erlang
+## `Dockerfile.erlang`
 
 Describes an image suitable for testing erlang + libssl1.0.0 with DSTU patches.
 
