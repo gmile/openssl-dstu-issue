@@ -1,4 +1,4 @@
-# OpenSSL with DSTU patches build suite
+# OpenSSL with DSTU patches. Build suite
 
 This repo contains Dockerfiles to help build & test OpenSSL with DSTU patches.
 
