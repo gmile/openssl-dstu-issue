@@ -48,31 +48,3 @@ RUN sed -e "101i\\\t-rm -f test/dstutest.c" -i debian/rules
 
 RUN DEBFULLNAME='Ievgen Pyrogov' DEBEMAIL=ievgen.pyrogov@gmail.com dch --increment --urgency=low "DSTU 4145 support"
 RUN DEBFULLNAME='Ievgen Pyrogov' DEBEMAIL=ievgen.pyrogov@gmail.com dch --release ""
-
-# Before starting container, export the gpg keys:
-#
-#   mkdir -p /tmp/keys
-#   gpg --export 9BFCF21AFB94ADF13290496EA44ED18DF134E42B > /tmp/keys/public.key
-#   gpg --export-secret-key 9BFCF21AFB94ADF13290496EA44ED18DF134E42B > /tmp/keys/private.key
-#
-# Start container:
-#
-#   docker run --mount type=bind,source=/tmp/keys,destination=/keys --rm -it gmile/openssl-dstu-issue bash
-#
-# After starting container, run:
-#
-#   gpg --import /keys/private.key /keys/public.key
-#   DEB_BUILD_OPTIONS=nocheck debuild -b
-#
-# After building the package:
-#
-#   dput ppa:iamexile/openssl-with-dstu openssl_1.0.1f-1ubuntu2.24_source.changes (source packages)
-#
-# TODO:
-#   - squash some RUN commands,
-#   - only extract selected files (e.g. only patches) from openssl_1.0.1f-1ubuntu9dstu2~utopic.debian.tar.gz
-#   - change release name in changelog (e.g. call it openssl-with-dstu instead of just openssl)
-#   - remove DEB_BUILD_OPTIONS=nocheck from debuild (e.g. do not skip tests)
-#   - how to pass gpg key from host to docker without temporal keys exporting?
-#   - try more recent Ubuntu LTS (at least Utopic should work?)
-#   - try more recent OpenSSL
