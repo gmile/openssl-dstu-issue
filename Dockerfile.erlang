@@ -1,0 +1,19 @@
+# vi:syntax=Dockerfile
+
+FROM ubuntu:14.04
+
+WORKDIR /openssl-sandbox
+
+RUN apt-get update
+RUN apt-get -y install software-properties-common wget gdebi
+RUN add-apt-repository -y ppa:iamexile/openssl-with-dstu
+RUN apt-get update
+RUN apt-get -y install openssl=1.0.1f-1ubuntu2.24 libssl=1.0.1f-1ubuntu2.24
+
+RUN wget https://packages.erlang-solutions.com/erlang/esl-erlang/FLAVOUR_1_general/esl-erlang_20.2.2-1~ubuntu~trusty_amd64.deb
+RUN wget https://packages.erlang-solutions.com/erlang/elixir/FLAVOUR_2_download/elixir_1.5.2-1~ubuntu~trusty_amd64.deb
+
+RUN gdebi --non-interactive esl-erlang_20.2.2-1~ubuntu~trusty_amd64.deb
+RUN gdebi --non-interactive elixir_1.5.2-1~ubuntu~trusty_amd64.deb
+
+RUN elixir -e 'IO.inspect :crypto.engine_load("dstu", [], [])'
