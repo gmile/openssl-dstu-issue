@@ -1,0 +1,51 @@
+# vi:syntax=Dockerfile
+
+FROM ubuntu:16.04
+
+WORKDIR /openssl-sandbox
+
+RUN apt-get update
+RUN apt-get -y install \
+  wget \
+  make gcc \
+  devscripts debhelper m4 bc quilt
+
+
+RUN wget https://launchpad.net/ubuntu/+archive/primary/+files/openssl_1.0.2g.orig.tar.gz
+RUN wget https://launchpad.net/ubuntu/+archive/primary/+files/openssl_1.0.2g-1ubuntu13.3.debian.tar.xz
+RUN wget https://launchpad.net/~ilya-muromec/+archive/ubuntu/openssl-dstu/+files/openssl_1.0.1f-1ubuntu9dstu2~utopic.debian.tar.gz
+
+RUN tar xvf openssl_1.0.2g.orig.tar.gz
+RUN tar xvf openssl_1.0.2g-1ubuntu13.3.debian.tar.xz -C openssl-1.0.2g
+RUN mkdir openssl-dstu-example && tar xvf openssl_1.0.1f-1ubuntu9dstu2~utopic.debian.tar.gz -C openssl-dstu-example
+
+RUN mkdir /patches
+ADD dstu-gh-patch1.patch /patches
+ADD dstu-gh-patch2.patch /patches
+ADD dstu-gh-patch3.patch /patches
+
+RUN cp openssl-dstu-example/debian/patches/dstu.patch             openssl-1.0.2g/debian/patches
+RUN cp openssl-dstu-example/debian/patches/dstu-engine-path.patch openssl-1.0.2g/debian/patches
+RUN cp openssl-dstu-example/debian/patches/dstu-engine-ld.patch   openssl-1.0.2g/debian/patches
+RUN cp /patches/dstu-gh-patch1.patch                              openssl-1.0.2g/debian/patches
+RUN cp /patches/dstu-gh-patch2.patch                              openssl-1.0.2g/debian/patches
+RUN cp /patches/dstu-gh-patch3.patch                              openssl-1.0.2g/debian/patches
+
+RUN echo dstu.patch             >> openssl-1.0.2g/debian/patches/series
+RUN echo dstu-engine-path.patch >> openssl-1.0.2g/debian/patches/series
+RUN echo dstu-engine-ld.patch   >> openssl-1.0.2g/debian/patches/series
+RUN echo dstu-gh-patch1.patch   >> openssl-1.0.2g/debian/patches/series
+RUN echo dstu-gh-patch2.patch   >> openssl-1.0.2g/debian/patches/series
+RUN echo dstu-gh-patch3.patch   >> openssl-1.0.2g/debian/patches/series
+
+WORKDIR /openssl-sandbox/openssl-1.0.2g
+
+RUN QUILT_PATCHES="debian/patches" quilt push -a; exit 0
+RUN QUILT_PATCHES="debian/patches" quilt push -f; exit 0
+RUN QUILT_PATCHES="debian/patches" quilt refresh
+RUN QUILT_PATCHES="debian/patches" quilt pop -a
+
+RUN sed -e "101i\\\t-rm -f test/dstutest.c" -i debian/rules
+
+RUN DEBFULLNAME='Ievgen Pyrogov' DEBEMAIL=ievgen.pyrogov@gmail.com dch --increment --urgency=low "DSTU 4145 support"
+RUN DEBFULLNAME='Ievgen Pyrogov' DEBEMAIL=ievgen.pyrogov@gmail.com dch --release ""
